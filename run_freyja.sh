@@ -23,7 +23,7 @@ run_name=$1
 
 echo "$(date): Set paths to run directory and freyja post-processing script."
 analysis_dir=/Volumes/IDGenomics_NAS/wastewater_sequencing
-freyja_cln_tsv=/Volumes/IDGenomics_NAS/wastewater_sequencing/wwtp_pscripts/freyja_custom_lin_processing.py
+freyja_cln_tsv=/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis/utils/freyja_custom_lin_processing.py
 
 
 echo "$(date): Create required folders for Freyja analysis if they do not exist."

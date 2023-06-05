@@ -12,7 +12,7 @@ initiating Wastewater sequencing run analysis and any downstream analysis.
 3) Generate ncbi submission folder that can be directly used for uploading files to NCBI and create a csv file used for uploading into Data-flo to extract biosample and SRA metadata tables.
 
 Usage:
-sh WWP_seq_new_run_auto.sh <wastewater sequencing run_name> | tee -a WWP_seq_new_run_auto.sh.log
+sh WWP_seq_new_run_auto.sh <wastewater sequencing run_name> | tee -a WWP_seq_new_run_auto.log
 Last updated on June 5,2023
 "
 ###########################
@@ -46,7 +46,6 @@ echo "$(date) : Bioinformatics analysis will be stored in $analysis_dir/$run_nam
 # Find the samplesheet for the run
 sample_sheet="$(ls $analysis_dir/*_wastewater.csv | head -n 1)"
 echo "$(date) : The sample sheet for run $run_name is $sample_sheet"
-
 
 echo "$(date) : Generating list of wastewater samples from the run sample sheet. Used to fetch matching fastq files in the next step"
 # Though, the sample sheet by default will only contain wastewater samples, doing this to avoid additional files such as 'undetermined_*.fastq.gz' to be included in the downstream analysis 
