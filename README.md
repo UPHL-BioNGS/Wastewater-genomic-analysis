@@ -9,11 +9,12 @@ This repository provides a series of bash scripts to analyze wastewater sequenci
 The process involves executing the following bash scripts in the given order:
 - `WWP_seq_new_run_auto.sh`
 - `run_viralrecon.sh`
-- `run_freyja_vrn_noBoot_singularity.sh`
+- `run_freyja.sh`
 
 ## Prerequisites
 
 - Bash
+- Python 3.7, 3.8, or 3.9
 - [Nextflow](https://www.nextflow.io/)
 - [ViralRecon](https://github.com/nf-core/viralrecon)
 - [Freyja](https://quay.io/repository/uphl/freyja)
@@ -59,3 +60,50 @@ You need to adjust the `SINGULARITY_CACHEDIR` and `NXF_SINGULARITY_CACHEDIR` env
 The ViralRecon pipeline requires a configuration file (`UPHL_viralrecon.config`), parameters file (`UPHL_viralrecon_params.yml`), and MultiQC configuration file (`new_multiqc_config.yaml`). These should be located in `../conf-files/` directory relative to where the script is run.
 
 The Freyja tool requires the `uphl-freyja-latest.simg` Singularity container image. This image can be pulled from the Quay ('https://quay.io/repository/uphl/freyja')
+
+
+# Wastewater Lineage Data Aggregator
+
+This script aggregates lineage data from wastewater sequencing. It takes the latest sequencing run results (`new_run_name_dir`), cleans it up (adds collection date, lat-long data), and merges them with previous lineage abundance results to output an aggregated output CSV file that can be uploaded into a Microreact project.
+
+## Usage
+
+```
+python freyja_old_new_res_merge.py <new_run_name_dir> <old_res_date>
+```
+
+- `new_run_name_dir`: Directory of the new sequencing run results.
+- `old_res_date`: Date of the old lineage abundance results.
+
+
+## Configuration
+
+Before running the script, you need to configure the following parameters in the `config` dictionary defined in the `main` function:
+
+- `wastewater_seq_dir`: Directory path of the wastewater sequencing data.
+- `lat_long_file`: File path of the latitude and longitude data.
+- `all_freyja_results_dir`: Directory path where all the freyja results are stored.
+
+## Custom Helper Functions
+
+The script provides some custom helper functions:
+
+- `check_abundance_sum(df)`: Checks if the abundance values by group (sample_id, collection_date) sum to 1. If the sum of abundances is greater than 1, it prints a message indicating potential duplicates or other inconsistencies.
+- `remove_duplicates(df)`: Removes duplicate entries based on sample_id, collection_date, and lineages columns.
+- `save_output(df, output_dir, output_file)`: Saves the output DataFrame to a CSV file.
+
+## Logging
+
+The script logs events and errors to a log file named `app.log` in the same directory. You can find detailed information about the script's execution and any warnings or errors encountered.
+
+## Example
+
+To run the script, execute the following command:
+
+```bash
+python freyja_old_new_res_merge.py new_run_directory old_results_date
+```
+
+Replace `new_run_directory` with the directory path of the new sequencing run results, and `old_results_date` with the date of the old lineage abundance results.
+
+For more information about the script and its functionality, refer to the inline comments within the code.
