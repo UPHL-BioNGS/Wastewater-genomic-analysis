@@ -17,7 +17,7 @@ Last updated on May 16,2023
 echo "$USAGE"
 run_name=$1
 
-script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis/'
+script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis'
 analysis_dir='/Volumes/IDGenomics_NAS/wastewater_sequencing'
 mkdir -p /Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/analysis/viralrecon/work
 
@@ -36,7 +36,7 @@ echo "$(date) : First create input samplesheet for viralrecon pipeline"
 if [ ! -f "$out_dir/${run_name}_samplesheet.csv" ]
     then
         echo "$(date) : $infile does not exist. Creating samplesheet required to run viralrecon"
-        python $scripts_dir/conf-files/fastq_dir_to_samplesheet.py $ww_fastq $out_dir/$infile
+        python $script_dir/conf-files/fastq_dir_to_samplesheet.py $ww_fastq $out_dir/$infile
         echo "$(date) : $infile Samplesheet generated" 
     else echo "$(date) : $infile already exists, starting viralrecon"
 fi
@@ -55,10 +55,10 @@ nextflow run nf-core/viralrecon --input $out_dir/$infile \
                                 --nextclade_dataset false \
 				                --nextclade_dataset_tag false \
                                 --schema_ignore_params 'genomes,primer_set_version' \
-                                --multiqc_config $scripts_dir/conf-files//new_multiqc_config.yaml \
+                                --multiqc_config $script_dir/conf-files/new_multiqc_config.yaml \
                                 -profile singularity \
-                                -params-file $scripts_dir/conf-files/UPHL_viralrecon_params.yml \
-                                -c $scripts_dir/conf-files/UPHL_viralrecon.config -w $work_dir
+                                -params-file $script_dir/conf-files/UPHL_viralrecon_params.yml \
+                                -c $script_dir/conf-files/UPHL_viralrecon.config -w $work_dir
  
 echo "$(date) : Copying variant long table result file to $results folder"
 cp $out_dir/variants/ivar/variants_long_table.csv $results/${run_name}_variants_long_table.csv
