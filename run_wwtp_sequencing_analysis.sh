@@ -54,6 +54,6 @@ fi
 echo "$(date) : Run Freyja analysis"
 log_file3=/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/freyja.log
 
-sh $script_dir/run_freyja_vrn_noBoot_singularity.sh $run_name | tee -a $log_file3
+sh $script_dir/run_freyja.sh $run_name | tee -a $log_file3
 
 
