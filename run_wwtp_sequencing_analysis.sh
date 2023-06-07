@@ -32,12 +32,12 @@ log_file1="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/WWP_seq_new_r
 # Create the status file if it does not exist
 touch "$log_file1"
 
-$script_dir/WWP_seq_new_run_auto.sh $run_name | tee -a $log_file1
+sh $script_dir/WWP_seq_new_run_auto.sh $run_name | tee -a $log_file1
 
 echo "$(date) : Run viralrecon"
 log_file2="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/viralrecon.log"
 
-$script_dir/run_viralrecon.sh $run_name | tee -a $log_file2
+sh $script_dir/run_viralrecon.sh $run_name | tee -a $log_file2
 
 #$script_dir/run_viralrecon_primerv5.sh $run_name | tee -a $log_file2
 
@@ -54,6 +54,6 @@ fi
 echo "$(date) : Run Freyja analysis"
 log_file3=/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/freyja.log
 
-$script_dir/run_freyja_vrn_noBoot_singularity.sh $run_name | tee -a $log_file3
+sh $script_dir/run_freyja_vrn_noBoot_singularity.sh $run_name | tee -a $log_file3
 
 
