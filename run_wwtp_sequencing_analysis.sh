@@ -22,7 +22,7 @@ echo "$USAGE"
 run_name=$1
 
 # Script directory for relative paths
-script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis/'
+script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis'
 
 echo "$(date) : Set up wastewater sequencing analysis"
 
