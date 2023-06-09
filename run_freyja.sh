@@ -39,7 +39,7 @@ echo "$(date): Set reference SARS-CoV-2 genome location."
 scov2=$analysis_dir/covidseq_ref/MN908947.3.fasta
 
 # Define the path to the status file, used to track how many samples have been processed.
-status_file="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/freyja_demix_status.txt"
+status_file="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/freyja_demix_status.txt"
 
 # Create the status file if it does not exist
 touch "$status_file"

@@ -27,7 +27,7 @@ script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-gen
 echo "$(date) : Set up wastewater sequencing analysis"
 
 # Define the path to the log file
-log_file1="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/WWP_seq_new_run_auto.log"
+log_file1="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/WWP_seq_new_run_auto.log"
 
 # Create the status file if it does not exist
 touch "$log_file1"
@@ -35,7 +35,7 @@ touch "$log_file1"
 sh $script_dir/WWP_seq_new_run_auto.sh $run_name | tee -a $log_file1
 
 echo "$(date) : Run viralrecon"
-log_file2="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/viralrecon.log"
+log_file2="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/viralrecon.log"
 
 sh $script_dir/run_viralrecon.sh $run_name | tee -a $log_file2
 
@@ -52,7 +52,7 @@ else
 fi
 
 echo "$(date) : Run Freyja analysis"
-log_file3=/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/freyja.log
+log_file3=/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/freyja.log
 
 sh $script_dir/run_freyja.sh $run_name | tee -a $log_file3
 

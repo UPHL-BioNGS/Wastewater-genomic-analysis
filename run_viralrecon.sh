@@ -28,7 +28,6 @@ work_dir=$analysis_dir/$run_name/analysis/viralrecon/work
 results=$analysis_dir/$run_name/results
 
 infile=${run_name}_samplesheet.csv
-log_file=$out_dir/${run_name}_viralrecon.log
 
 echo "$(date) : Run Wastewater sample data with viralrecon for run $run_name"
 echo "$(date) : First create input samplesheet for viralrecon pipeline"
