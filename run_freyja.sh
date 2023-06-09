@@ -59,7 +59,6 @@ do
  
     singularity exec --bind ${analysis_dir} uphl-freyja-latest.simg freyja variants ${bam} --variants $workdir/${sample}_out_variants --depths $workdir/${sample}_out_depths --ref ${scov2}
 
-    echo "$(date): Running Demultiplexing step for $sample" >> $status_file
     depth=${sample}_out_depths
     var=${sample}_out_variants.tsv
 
@@ -67,7 +66,7 @@ do
     #var_path="$workdir/${depth}"
 
     #output_file="$outdir${sample}_lin_out.tsv"
-
+    echo "$(date): Running Demultiplexing step for $sample" >> $status_file
     singularity exec --bind ${analysis_dir} uphl-freyja-latest.simg freyja demix $workdir/${var} $workdir/${depth} --eps 0.01 --covcut 10 --confirmedonly --output $outdir${sample}_lin_out.tsv
 
     #echo "$(date): Boostrap analysis step running for $sample" | tee -a $log_file
@@ -76,7 +75,7 @@ do
     # Check the exit status of the 'freyja demix' command. This is useful for tracking which samples failed at the demultiplex stage.
     if [ $? -eq 0 ]; then
         if [ -f "${outdir}/${sample}_lin_out.tsv" ]; then
-        echo "Run $run_name: Sample $sample processed successfully."
+        echo "Run $run_name: Sample $sample processed successfully." >> $status_file
         fi
     else
         echo "Run $run_name: Sample $sample did not process successfully. SolverError: Solver 'ECOS' failed. Skipping this sample." >> $status_file
@@ -84,7 +83,7 @@ do
 
 done
 
-echo "$(date): Demultiplexing step completed and results are stored in $outdir"
+echo "$(date): Demultiplexing step completed and results are stored in $outdir" >> $status_file
 echo "$(date): Running lineage aggregation step in Freyja"
 
 singularity exec --bind ${analysis_dir} uphl-freyja-latest.simg freyja aggregate $outdir --output $outdir${run_name}_lineages_aggregate.tsv --ext tsv
