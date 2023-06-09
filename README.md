@@ -15,7 +15,8 @@ The process involves executing the following bash scripts in the given order:
 - Python 3.7, 3.8, or 3.9
 - [Nextflow](https://www.nextflow.io/)
 - [ViralRecon](https://github.com/nf-core/viralrecon)
-- [Freyja](https://quay.io/repository/uphl/freyja)
+- [Freyja](https://github.com/andersen-lab/Freyja/tree/main)
+- [Freyja docker container](https://quay.io/repository/uphl/freyja)
 - Access to sequencing results directory `/Volumes/IDGenomics_NAS/wastewater_sequencing/`
 
 ## Setup and Run Bioinformatics Analysis
