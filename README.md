@@ -26,13 +26,13 @@ Here is a basic outline of the project's directory structure:
         └── <run_name>
             ├── logs
             ├── raw_data
-                ├── 230518-ACSSD32-UT-VH00770-230608_R1_001.fastq.gz
-                ├── 230518-AVWRF29-UT-VH00770-230608_R1_001.fastq.gz
-                ├── 230518-BCSD20-UT-VH00770-230608_R1_001.fastq.gz
-                ├── 230518-CCRWWTF31-UT-VH00770-230608_R1_001.fastq.gz
-                ├── 230518-CDSD17-UT-VH00770-230608_R1_001.fastq.gz
+                ├── 230518-ACSSD32_S124_L001_R1_001.fastq.gz
+                ├── 230518-AVWRF29_S121_L001_R1_001.fastq.gz
+                ├── 230518-BCSD20_S112_L001_R1_001.fastq.gz
+                ├── 230518-CCRWWTF31_S123_L001_R1_001.fastq.gz
+                ├── 230518-CDSD17_S125_L001_R1_001.fastq.gz
                 ├── Logs
-            ├── SampleSheet_UT-VH00770-230608_wastewater.csv
+            ├── SampleSheet_UT-VH00770-230600_wastewater.csv
         └── all_freyja_results
             
 ```
@@ -121,32 +121,32 @@ After completion of bioinformatic analysis, the project has the following direct
                 └── 230518-CDSD17-UT_R1.fastq.gz
             ├── raw_data
                 ├── fastq
-                    ├── 230518-ACSSD32-UT-VH00770-230608_R1_001.fastq.gz
-                    ├── 230518-AVWRF29-UT-VH00770-230608_R1_001.fastq.gz
-                    ├── 230518-BCSD20-UT-VH00770-230608_R1_001.fastq.gz
-                    ├── 230518-CCRWWTF31-UT-VH00770-230608_R1_001.fastq.gz
-                    └── 230518-CDSD17-UT-VH00770-230608_R1_001.fastq.gz
+                    ├── 230518-ACSSD32-UT-VH00770-230600_R1_001.fastq.gz
+                    ├── 230518-AVWRF29-UT-VH00770-230600_R1_001.fastq.gz
+                    ├── 230518-BCSD20-UT-VH00770-230600_R1_001.fastq.gz
+                    ├── 230518-CCRWWTF31-UT-VH00770-230600_R1_001.fastq.gz
+                    └── 230518-CDSD17-UT-VH00770-230600_R1_001.fastq.gz
                 └── Logs    
             ├── results
-                ├── UT-VH00770-230608_freyja_lin_dict_long_df_lingrps_final.csv
-                ├── UT-VH00770-230608_lineage_counts.csv
-                ├── UT-VH00770-230608_lineages_aggregate.tsv
-                ├── UT-VH00770-230608_multiqc_report.html
-                ├── UT-VH00770-230608_summary_variants_metrics_mqc.csv
-                ├── UT-VH00770-230608_variants_long_table.csv
-                └── UT-VH00770-230608_viralrecon_lineage_report.csv
-            ├── SampleSheet_UT-VH00770-230608_wastewater.csv
-            ├── UT-VH00770-230608_sra_upload_metadata.csv
-            ├── UT-VH00770-230608_biosample_upload_metadata.csv
-            ├── UT-VH00770-230608_ncbi_submission_info.csv
-            ├── UT-VH00770-230608_wastewater_sample_list.csv
+                ├── UT-VH00770-230600_freyja_lin_dict_long_df_lingrps_final.csv
+                ├── UT-VH00770-230600_lineage_counts.csv
+                ├── UT-VH00770-230600_lineages_aggregate.tsv
+                ├── UT-VH00770-230600_multiqc_report.html
+                ├── UT-VH00770-230600_summary_variants_metrics_mqc.csv
+                ├── UT-VH00770-230600_variants_long_table.csv
+                └── UT-VH00770-230600_viralrecon_lineage_report.csv
+            ├── SampleSheet_UT-VH00770-230600_wastewater.csv
+            ├── UT-VH00770-230600_sra_upload_metadata.csv
+            ├── UT-VH00770-230600_biosample_upload_metadata.csv
+            ├── UT-VH00770-230600_ncbi_submission_info.csv
+            ├── UT-VH00770-230600_wastewater_sample_list.csv
             └── 
         └── all_freyja_results
 ```
 
 # Wastewater Lineage Data Aggregator
 
-This script aggregates lineage data from wastewater sequencing. It takes the latest sequencing run results 'UT-VH00770-230608_freyja_lin_dict_long_df_lingrps_final.csv', cleans it up (adds collection date, lat-long data), and merges them with previous lineage abundance results to output an aggregated CSV file that can be uploaded into the Wastewater Microreact project.
+This script aggregates lineage data from wastewater sequencing. It takes the latest sequencing run results 'UT-VH00770-230600_freyja_lin_dict_long_df_lingrps_final.csv', cleans it up (adds collection date, lat-long data), and merges them with previous lineage abundance results to output an aggregated CSV file that can be uploaded into the Wastewater Microreact project.
 
 ## Configuration
 
@@ -170,6 +170,10 @@ python freyja_old_new_res_merge.py new_run_directory old_results_date
 ```
 The final output csv file after this step can be uploaded to Microreact for visualization.
 For more information about the script and its functionality, refer to the inline comments within the code.
+
+# Uploading Fastq files to NCBI SRA database
+
+After completion of the bioinformatics analysis, the output file 'UT-VH00770-230600_ncbi_submission_info.csv' can be used to create NCBI templates for biosample and SRA submission. Detailed instructions on submitting data to NCBI are located at 'https://docs.google.com/document/d/1rGCWnDpGljdLqMs0FZ90TJLPtHRFpwIo-lalLKINn0w/edit?usp=sharing'. This file can only be accessed by anyone within UPHL. 
 
 # Contribution
 
