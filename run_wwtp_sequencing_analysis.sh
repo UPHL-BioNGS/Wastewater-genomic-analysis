@@ -20,6 +20,7 @@ Last updated on June 05,2023
 echo "$USAGE"
 
 run_name=$1
+resume_option=$2
 
 # Script directory for relative paths
 script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis'
@@ -37,7 +38,7 @@ sh $script_dir/WWP_seq_new_run_auto.sh $run_name | tee -a $log_file1
 echo "$(date) : Run viralrecon"
 log_file2="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/viralrecon.log"
 
-sh $script_dir/run_viralrecon.sh $run_name | tee -a $log_file2
+sh $script_dir/run_viralrecon.sh $run_name $resume_option | tee -a $log_file2
 
 #$script_dir/run_viralrecon_primerv5.sh $run_name | tee -a $log_file2
 

@@ -16,6 +16,7 @@ Last updated on May 16,2023
 
 echo "$USAGE"
 run_name=$1
+resume_option=$2
 
 script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis'
 analysis_dir='/Volumes/IDGenomics_NAS/wastewater_sequencing'
@@ -48,6 +49,20 @@ echo "$(date) : Running viralrecon"
 
 #Use UPHL_viralrecon.config to update Pangolin container, if needed
 
+if [ "$resume_option" = "-resume" ]
+then
+    nextflow run nf-core/viralrecon -name ${run_name} -resume ${run_name} --input $out_dir/$infile \
+                                    --primer_set_version 5.3.2 \
+                                    --outdir $out_dir \
+                                    --nextclade_dataset false \
+                                    --nextclade_dataset_tag false \
+                                    --schema_ignore_params 'genomes,primer_set_version' \
+                                    --multiqc_config $script_dir/conf-files/new_multiqc_config.yaml \
+                                    -profile singularity \
+                                    -params-file $script_dir/conf-files/UPHL_viralrecon_params.yml \
+                                    -c $script_dir/conf-files/UPHL_viralrecon.config \
+                                    -w $work_dir
+else
 nextflow run nf-core/viralrecon --input $out_dir/$infile \
                                 --primer_set_version 5.3.2 \
                                 --outdir $out_dir \
@@ -58,9 +73,9 @@ nextflow run nf-core/viralrecon --input $out_dir/$infile \
                                 -profile singularity \
                                 -params-file $script_dir/conf-files/UPHL_viralrecon_params.yml \
                                 -c $script_dir/conf-files/UPHL_viralrecon.config \
-                                -w $work_dir \
-                                -resume
- 
+                                -w $work_dir
+fi
+
 echo "$(date) : Copying variant long table result file to $results folder"
 cp $out_dir/variants/ivar/variants_long_table.csv $results/${run_name}_variants_long_table.csv
 
