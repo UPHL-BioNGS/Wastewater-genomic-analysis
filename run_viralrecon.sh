@@ -57,7 +57,9 @@ nextflow run nf-core/viralrecon --input $out_dir/$infile \
                                 --multiqc_config $script_dir/conf-files/new_multiqc_config.yaml \
                                 -profile singularity \
                                 -params-file $script_dir/conf-files/UPHL_viralrecon_params.yml \
-                                -c $script_dir/conf-files/UPHL_viralrecon.config -w $work_dir
+                                -c $script_dir/conf-files/UPHL_viralrecon.config \
+                                -w $work_dir \
+                                -resume
  
 echo "$(date) : Copying variant long table result file to $results folder"
 cp $out_dir/variants/ivar/variants_long_table.csv $results/${run_name}_variants_long_table.csv
