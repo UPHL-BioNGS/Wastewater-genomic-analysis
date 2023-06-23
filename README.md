@@ -2,9 +2,9 @@
 
 A collection of scripts that UPHL uses to analyze wastewater sequencing data.
 
-This repository provides a suite of bash scripts used for the analysis of wastewater sequencing data, with a primary focus on determining the SARS-CoV2 lineages and their abundance. Initially developed for usage by UPHL bioinformaticians, these scripts can also be used by other researchers interested in similar genomic analyses. 
+This repository provides a suite of bash and python scripts used for the analysis of wastewater sequencing data, with a primary focus on determining the SARS-CoV2 lineages and their abundance. Initially developed for usage by UPHL bioinformaticians, these scripts can also be used by other researchers interested in similar genomic analyses. 
 
-These scripts set up the required directory structure for analysis, run bioinformatics analysis, and generate submission folders for NCBI. The output of the analysis is an aggregated CSV file containing the lineage data, which can be further used for visualization purposes or deeper data exploration.
+The bash scripts set up the required directory structure for analysis, run bioinformatics analysis, and generate submission folders for NCBI. The output of the bioinformatics analysis is an aggregated CSV file containing the lineage data. You will need to run [the python script under section 'Wastewater Lineage Data Aggregator'](##wastewater-lineage-data-aggregator) to complete the workflow as this python script will aggregate lineage data from previous runs with the current sequencing run and generate a CSV file which can be further used for visualization purpose on Microreact or deeper data exploration.
 
 ## Prerequisites
 
@@ -48,10 +48,10 @@ The process involves executing the following bash scripts in the given order:
 
 To run all the steps of the analysis in one single script. This is the recommended way of running the wastewater genomics analysis unless you need to troubleshoot the individual scripts when this one fails. Remember to start a screen as this process can take upto hours depending on the sequence data generated.
 
-Execute the bash script with the sequencing `run_name` as an argument:
+Execute the bash script with the sequencing `run_name` as an argument. You can use -resume flag as an optional argument and it will be passed to run_viralrecon.sh and Nextflow will attempt to resume the pipeline. It is a great way of resuming a run without having to start the analysis from scratch. If you don't provide it, $resume_option will be empty, and run_viralrecon.sh will run without the -resume flag, just like before.
 
 ```bash
-sh run_wwtp_sequencing_analysis.sh <wastewater sequencing run_name>
+sh run_wwtp_sequencing_analysis.sh <wastewater sequencing run_name> -resume
 ```
 Here are the steps involved in executing the analysis in more detail. Please note that you won't need to run these scripts individually for routine data analysis.
 
@@ -70,10 +70,10 @@ This script also generates a csv file with NCBI submission ID and associated fas
 Execute the bash script with the sequencing `run_name` as an argument:
 
 ```bash
-sh run_viralrecon.sh <wastewater sequencing run_name> | tee -a viralrecon.log
+sh run_viralrecon.sh <wastewater sequencing run_name> -resume | tee -a viralrecon.log
 ```
 
-This script executes the [Viralrecon](https://github.com/nf-core/viralrecon) pipeline with wastewater sequencing data. It checks and creates an input samplesheet required to run the Viralrecon pipeline, runs the pipeline, and copies the resulting files to a dedicated `results` directory.
+This script executes the [Viralrecon](https://github.com/nf-core/viralrecon) pipeline with wastewater sequencing data. It checks and creates an input samplesheet required to run the Viralrecon pipeline, runs the pipeline, and copies the resulting files to a dedicated `results` directory. As described earlier, you can use -resume flag as an optional argument and Nextflow will attempt to resume the pipeline.
 
 This script also handles post-pipeline cleanup by removing the `work` directory.
 
@@ -146,7 +146,7 @@ After completion of bioinformatic analysis, the project has the following direct
 
 # Wastewater Lineage Data Aggregator
 
-This script aggregates lineage data from wastewater sequencing. It takes the latest sequencing run results 'UT-VH00770-230600_freyja_lin_dict_long_df_lingrps_final.csv', cleans it up (adds collection date, lat-long data), and merges them with previous lineage abundance results to output an aggregated CSV file that can be uploaded into the Wastewater Microreact project.
+This script needs to be run after you have finished running 'run_wwtp_sequencing_analysis.sh'. This script aggregates lineage data across wastewater sequencing runs. It takes the latest sequencing run results e.g., 'UT-VH00770-230600_freyja_lin_dict_long_df_lingrps_final.csv', cleans it up (adds collection date, lat-long data), and merges them with previous lineage abundance results to output an aggregated CSV file that can be uploaded into the Wastewater Microreact project.
 
 ## Configuration
 
