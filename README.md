@@ -55,7 +55,7 @@ Execute the bash script with the sequencing `run_name` as an argument.
 sh run_wwtp_sequencing_analysis.sh <wastewater sequencing run_name>
 ```
 
-You can use the '-resume' flag as an optional argument and it will be passed to 'run_viralrecon.sh' script and Nextflow will attempt to resume the pipeline. It is a great way of resuming a run without having to start the analysis from scratch. If you don't provide it, $resume_option will be empty, and 'run_viralrecon.sh' will run without the -resume flag, just like before.
+You can use the `-resume` flag as an optional argument and it will be passed to [run_viralrecon.sh](run_viralrecon.sh) script and Nextflow will attempt to resume the pipeline. It is a great way of resuming a run without having to start the analysis from scratch. If you don't provide it, `$resume_option` will be empty, and `run_viralrecon.sh` will run without the `-resume` flag, just like before.
 
 ```bash
 sh run_wwtp_sequencing_analysis.sh <wastewater sequencing run_name> -resume
@@ -90,7 +90,7 @@ log_file2="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/viralrec
 sh run_viralrecon.sh <wastewater sequencing run_name> | tee -a $log_file2
 ```
 
-This script executes the [Viralrecon](https://github.com/nf-core/viralrecon) pipeline with wastewater sequencing data. It checks and creates an input samplesheet required to run the Viralrecon pipeline, runs the pipeline, and copies the resulting files to a dedicated `results` directory. As described earlier, you can use '-resume' flag as an optional argument and Nextflow will attempt to resume the pipeline.
+This script executes the [Viralrecon](https://github.com/nf-core/viralrecon) pipeline with wastewater sequencing data. It checks and creates an input samplesheet required to run the Viralrecon pipeline, runs the pipeline, and copies the resulting files to a dedicated `results` directory. As described earlier, you can use `-resume` flag as an optional argument and Nextflow will attempt to resume the pipeline.
 
 This script also handles post-pipeline cleanup by removing the `work` directory.
 
@@ -111,7 +111,7 @@ You may need to adjust the `SINGULARITY_CACHEDIR` and `NXF_SINGULARITY_CACHEDIR`
 
 Local copy of this github repo is located at /Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis.
 
-The [Viralrecon](https://github.com/nf-core/viralrecon) pipeline requires a configuration file (`UPHL_viralrecon.config`), parameters file (`UPHL_viralrecon_params.yml`), and MultiQC configuration file (`new_multiqc_config.yaml`). These should be located in `./conf-files/` directory relative to where the script is run.
+The [Viralrecon](https://github.com/nf-core/viralrecon) pipeline requires a configuration file [UPHL_viralrecon.config](./conf-files/UPHL_viralrecon.config), parameters file [UPHL_viralrecon_params.yml](./conf-files/UPHL_viralrecon_params.yml), and MultiQC configuration file [new_multiqc_config.yaml](./conf-files/new_multiqc_config.yaml). These should be located in [conf-files](./conf-files/) directory relative to where the script is run.
 
 The [Freyja](https://github.com/andersen-lab/Freyja/tree/main) tool requires the `uphl-freyja-latest.simg` singularity container image. This image can be pulled from Quay ('https://quay.io/repository/uphl/freyja')
 
