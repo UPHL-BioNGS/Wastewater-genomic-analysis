@@ -25,7 +25,7 @@ resume_option=$2
 # Script directory for relative paths
 script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis'
 
-echo "$(date) : Set up wastewater sequencing analysis"
+echo "$(date) : Step 1/3. Set up wastewater sequencing analysis"
 
 # Define the path to the log file
 log_file1="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/WWP_seq_new_run_auto.log"
@@ -35,7 +35,7 @@ touch "$log_file1"
 
 sh $script_dir/WWP_seq_new_run_auto.sh $run_name | tee -a $log_file1
 
-echo "$(date) : Run viralrecon"
+echo "$(date) : Step 2/3. Run viralrecon"
 log_file2="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/viralrecon.log"
 
 sh $script_dir/run_viralrecon.sh $run_name $resume_option | tee -a $log_file2
@@ -52,8 +52,8 @@ else
     exit 1
 fi
 
-echo "$(date) : Run Freyja analysis"
-log_file3=/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/freyja.log
+echo "$(date) : Step 3/3. Run Freyja analysis"
+log_file3="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/freyja.log"
 
 sh $script_dir/run_freyja.sh $run_name | tee -a $log_file3
 
