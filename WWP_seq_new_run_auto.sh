@@ -81,7 +81,10 @@ echo "$(date) : Rename fastq files for downstream analysis and for NCBI submissi
 #    done
 #done
 
-for file in *_R1_001.fastq.gz; do
+for file in *.fastq.gz; do
+    echo "$(date) : Copy fastq files to NCBI submission directory"
+    cp "${file}" "${analysis_dir}/ncbi_submission/$(echo "${file}" | sed -E 's/_S[0-9]+_L[0-9]+/-UT/')"
+    echo "$(date) : Rename fastq files for downstream analysis"
     # Check if the file contains the run_name (won't be true for NextSeq 2000 runs)
     if [[ "${file}" == *"${run_name}"* ]]; then
         # Remove the lane and Set identifiers
@@ -95,8 +98,6 @@ for file in *_R1_001.fastq.gz; do
         echo "${new_name}"
         mv "${file}" "${new_name}"
     fi
-    echo "$(date) : Copy the renamed files to NCBI submission directory"
-    cp "${new_name}" "${analysis_dir}/ncbi_submission/$(echo "${new_name}" | sed -E 's#\-(A01290|VH00770).*##')_R1.fastq.gz" 
 done
 
 # Remove controls from NCBI submission directory prior to submission
@@ -108,13 +109,19 @@ echo "$(date) : Fastq files ready for NCBI submission. Fastq filenames have been
 
 # Create a CSV file with NCBI submission ID and associated fastq file names, used later in Data-flo for creating NCBI submission template
 echo "$(date) : Create a csv file with NCBI submission ID and associated fastq file names which gets uploaded to Data-flo for generating NCBI submission templates"
-for file in ${analysis_dir}/ncbi_submission/*.fastq.gz; 
+for file1 in ${analysis_dir}/ncbi_submission/*_R1_001.fastq.gz
 do
-    #echo ${file##*/}
-    sample_id=$(basename "$file" _R1.fastq.gz)
-    echo $sample_id
-    #Generating a csv file with NCBI submission ID and associated fastq file names which gets uploaded to Data-flo for generating NCBI submission templates
-    echo "${sample_id},${file##*/}" >> ${analysis_dir}/${run_name}_ncbi_submission_info.csv
+  sample_id=$(basename "$file1" _R1_001.fastq.gz)
+  echo $sample_id
+  file2="${file1%_R1_001.fastq.gz}_R2_001.fastq.gz"
+
+  if [ -f "$file2" ]; then  # if the file exists
+    echo "Found paired-end fastq file"
+    echo "${sample_id},${file1##*/},${file2##*/}" >> ${analysis_dir}/${run_name}_ncbi_submission_info.csv
+  else
+    echo "Found single-end fastq file"
+    echo "${sample_id},${file1##*/}," >> ${analysis_dir}/${run_name}_ncbi_submission_info.csv
+  fi
 done
 
 echo "$(date) : Fastq files names are now cleaned. Folders and files are in place. You are now ready for downstream bioinformatics analysis and NCBI submission."   
