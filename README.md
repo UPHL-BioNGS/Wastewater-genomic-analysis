@@ -2,7 +2,7 @@
 
 A collection of scripts that UPHL uses to analyze wastewater sequencing data.
 
-This repository provides a suite of bash and python scripts used for the analysis of wastewater sequencing data, with a primary focus on determining the SARS-CoV2 lineages and their abundance. Initially developed for usage by UPHL bioinformaticians, these scripts can also be used by other researchers interested in similar genomic analyses. 
+This repository provides a suite of bash and python scripts used for the analysis of wastewater sequencing data, with a primary focus on determining the SARS-CoV2 lineages and their abundance. Initially developed for usage by UPHL bioinformaticians, these scripts can also be adapted by other researchers interested in similar genomic analyses. However, please note the specific directory structure required for running the different steps in the analysis.
 
 The bash scripts set up the required directory structure for analysis, run bioinformatics analysis, and generate submission folders for NCBI. The output of the bioinformatics analysis is an aggregated CSV file containing the lineage data. You will need to run the python script under section [Wastewater Lineage Data Aggregator](#wastewater-lineage-data-aggregator) to complete the workflow as this python script will aggregate lineage data from previous runs with the current sequencing run and generate a CSV file which can be further used for visualization purpose on Microreact or deeper data exploration.
 

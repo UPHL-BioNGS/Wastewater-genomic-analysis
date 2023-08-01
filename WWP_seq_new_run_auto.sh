@@ -13,7 +13,7 @@ initiating Wastewater sequencing run analysis and any downstream analysis.
 
 Usage:
 sh WWP_seq_new_run_auto.sh <wastewater sequencing run_name> | tee -a WWP_seq_new_run_auto.log
-Last updated on June 5,2023
+Last updated on July 30,2023
 "
 ###########################
 
