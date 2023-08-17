@@ -46,8 +46,8 @@ fi
 echo "$(date) : Running viralrecon"
 #export SINGULARITY_CACHEDIR=/home/pgupta/singularity
 #export NXF_SINGULARITY_CACHEDIR=/home/pgupta/singularity
-export APPTAINER_CACHEDIR=/home/pgupta/apptainer
-export NXF_APPTAINER_CACHEDIR=/home/pgupta/apptainer
+# export APPTAINER_CACHEDIR=/home/pgupta/apptainer
+# export NXF_APPTAINER_CACHEDIR=/home/pgupta/apptainer
 
 #Use UPHL_viralrecon.config to update Pangolin container, if needed
 
