@@ -47,7 +47,7 @@ echo "$(date) : Running viralrecon"
 #export SINGULARITY_CACHEDIR=/home/pgupta/singularity
 #export NXF_SINGULARITY_CACHEDIR=/home/pgupta/singularity
 export APPTAINER_CACHEDIR=/home/pgupta/apptainer
-export NXF_APPTAINER_CACHEDIR= /home/pgupta/apptainer
+export NXF_APPTAINER_CACHEDIR=/home/pgupta/apptainer
 
 #Use UPHL_viralrecon.config to update Pangolin container, if needed
 
@@ -56,8 +56,7 @@ then
     nextflow run nf-core/viralrecon -name ${run_name} -resume ${run_name} --input $out_dir/$infile \
                                     --primer_set_version 5.3.2 \
                                     --outdir $out_dir \
-                                    --nextclade_dataset false \
-                                    --nextclade_dataset_tag false \
+                                    --skip_nextclade \
                                     --schema_ignore_params 'genomes,primer_set_version' \
                                     --multiqc_config $script_dir/conf-files/new_multiqc_config.yaml \
                                     -params-file $script_dir/conf-files/UPHL_viralrecon_params.yml \
@@ -67,8 +66,7 @@ else
 nextflow run nf-core/viralrecon --input $out_dir/$infile \
                                 --primer_set_version 5.3.2 \
                                 --outdir $out_dir \
-                                --nextclade_dataset false \
-				                --nextclade_dataset_tag false \
+                                --skip_nextclade \
                                 --schema_ignore_params 'genomes,primer_set_version' \
                                 --multiqc_config $script_dir/conf-files/new_multiqc_config.yaml \
                                 -params-file $script_dir/conf-files/UPHL_viralrecon_params.yml \
