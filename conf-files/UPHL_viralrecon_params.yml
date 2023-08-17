@@ -8,6 +8,7 @@ kraken2_variants_host_filter: true
 skip_asciigenome: true
 min_mapped_reads: 1000
 save_mpileup: true
+skip_nextclade: true
 variant_caller: 'ivar'
 consensus_caller: 'bcftools'
 skip_assembly: true
