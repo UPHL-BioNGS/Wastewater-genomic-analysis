@@ -18,7 +18,7 @@ echo "$USAGE"
 run_name=$1
 resume_option=$2
 
-script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis'
+script_dir='/Volumes/IDGenomics_NAS/wastewater_sequencing/Wastewater-genomic-analysis'
 analysis_dir='/Volumes/IDGenomics_NAS/wastewater_sequencing'
 mkdir -p /Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/analysis/viralrecon/work
 
@@ -57,6 +57,7 @@ then
                                     --primer_set_version 5.3.2 \
                                     --outdir $out_dir \
                                     --schema_ignore_params 'genomes,primer_set_version' \
+                                    -profile singularity \
                                     --multiqc_config $script_dir/conf-files/new_multiqc_config.yaml \
                                     -params-file $script_dir/conf-files/UPHL_viralrecon_params.yml \
                                     -c $script_dir/conf-files/UPHL_viralrecon.config \
@@ -66,6 +67,7 @@ nextflow run nf-core/viralrecon --input $out_dir/$infile \
                                 --primer_set_version 5.3.2 \
                                 --outdir $out_dir \
                                 --schema_ignore_params 'genomes,primer_set_version' \
+                                -profile singularity \
                                 --multiqc_config $script_dir/conf-files/new_multiqc_config.yaml \
                                 -params-file $script_dir/conf-files/UPHL_viralrecon_params.yml \
                                 -c $script_dir/conf-files/UPHL_viralrecon.config \
