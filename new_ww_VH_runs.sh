@@ -32,7 +32,7 @@ do
     echo "$(date) : $run_name sequencing is complete."
 
     # Checking to see if this run in the output directory
-    sample_sheet=$(ls $raw_run/*csv | head -n 1)
+    sample_sheet=$(ls $raw_run/SampleSheet.csv | head -n 1)
 
     # Checking for sample sheet, CopyComplete, and RTAComplete
     if [ -n "$sample_sheet" ] && [ -f "$raw_run/CopyComplete.txt" ] && [ -f "$raw_run/RTAComplete.txt" ]
