@@ -40,7 +40,7 @@ do
       echo "$(date) : The sample sheet for $run_name is $sample_sheet"
     else
       echo "$(date) : FATAL : Something is missing. Analysis cannot continue."
-      if [ -z "$(ls $raw_run/*csv | head -n 1)" ]; then echo "$(date) : FATAL : SampleSheet*csv is missing."  ; fi
+      if [ -z "$(ls $raw_run/SampleSheet.csv | head -n 1)" ]; then echo "$(date) : FATAL : SampleSheet.csv is missing."  ; fi
       if [ ! -f "$raw_run/CopyComplete.txt" ]               ; then echo "$(date) : FATAL : CopyComplete.txt is missing." ; fi
       if [ ! -f "$raw_run/RTAComplete.txt" ]                ; then echo "$(date) : FATAL : RTAComplete.txt is missing."  ; fi
     fi
