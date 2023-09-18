@@ -13,7 +13,7 @@ Purpose:
 
 Usage:
 run_freyja.sh <wastewater sequencing run_name> | tee -a freyja.log
-Last updated on: June 05,2023
+Last updated on: September 18,2023
 "
 ###########################
 
@@ -34,6 +34,7 @@ workdir=$analysis_dir/$run_name/analysis/freyja
 in_dir=$analysis_dir/$run_name/analysis/viralrecon/variants/bowtie2
 outdir=$workdir/lineage_out/
 results=$analysis_dir/$run_name/results
+coverage_file="${analysis_dir}/${run_name}/results/${run_name}_summary_variants_metrics_mqc.csv"
 
 echo "$(date): Set reference SARS-CoV-2 genome location."
 scov2=$analysis_dir/covidseq_ref/MN908947.3.fasta
@@ -50,14 +51,33 @@ singularity pull -F --name uphl-freyja-latest.simg docker://quay.io/uphl/freyja:
 echo "$(date): Starting Freyja" >> $status_file
 echo "$(date): Getting the input variants and depth file from bam files for Freyja analysis" >> $status_file
 
+# Function to retrieve genome coverage from csv
+get_coverage() {
+    local file="$1"
+    grep -E "^$file," "${coverage_file}" | awk -F',' '{print $10}'
+}
+
+coverage_threshold=40  # Set 40% as the threshold
+
 # Loop over each BAM file in input directory, perform Freyja variant analysis, and demultiplex each sample to get lineages
 
-for bam in ${in_dir}/*_trim.sorted.bam; 
-do 
-    infile=${bam##*/}; echo "$(date): input file name is $infile"
-    sample=${infile%-UT*}; echo "$(date): base name is $sample" 
- 
-    singularity exec --bind ${analysis_dir} uphl-freyja-latest.simg freyja variants ${bam} --variants $workdir/${sample}_out_variants --depths $workdir/${sample}_out_depths --ref ${scov2}
+for bam in ${in_dir}/*.ivar_trim.sorted.bam; 
+do
+    # Extracting just the identifier from the bam filename
+    identifier=$(basename "$bam" .ivar_trim.sorted.bam)
+    
+    coverage=$(get_coverage "$identifier")
+    
+    if (( $(echo "$coverage >= $coverage_threshold" | bc -l) )); then
+        echo "$(date): input file name is $bam"
+        sample=${identifier%-UT*} 
+        echo "$(date): base name is $sample" >> $status_file
+        echo "$(date): Running Freyja variants step for $sample" >> $status_file
+
+        singularity exec --bind ${analysis_dir} uphl-freyja-latest.simg freyja variants ${bam} --variants $workdir/${sample}_out_variants --depths $workdir/${sample}_out_depths --ref ${scov2}
+    else
+        echo "$(date): Skipping $bam due to insufficient genome coverage." >> $status_file
+    fi
 
     depth=${sample}_out_depths
     var=${sample}_out_variants.tsv
