@@ -1,5 +1,3 @@
-# This is WIP.
-
 #!/bin/bash
 # if any errors, then exit
 set -e
