@@ -3,7 +3,7 @@
 USAGE="
 Looking for new WW COVID runs on VH00770
 
-new_ww_VH_runs.sh
+./VHrun_ww_seq_analysis
 
 Last updated August 18, 2023
 "
@@ -13,7 +13,7 @@ echo -e "$USAGE"
 # Getting the directory where this script is for relative paths
 # scriptdir=$(echo $0 | sed 's/new_runs.sh//g')
 
-script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis'
+script_dir='/Volumes/NGS/Bioinformatics/ww_analysis_scripts/Wastewater-genomic-analysis'
 
 # This is going to keep the loop going
 while [ -d "/Volumes/NGS/Analysis" ]

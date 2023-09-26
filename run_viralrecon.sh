@@ -18,7 +18,7 @@ echo "$USAGE"
 run_name=$1
 resume_option=$2
 
-script_dir='/Volumes/IDGenomics_NAS/wastewater_sequencing/Wastewater-genomic-analysis'
+script_dir='/Volumes/NGS/Bioinformatics/ww_analysis_scripts/Wastewater-genomic-analysis'
 analysis_dir='/Volumes/IDGenomics_NAS/wastewater_sequencing'
 mkdir -p /Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/analysis/viralrecon/work
 
