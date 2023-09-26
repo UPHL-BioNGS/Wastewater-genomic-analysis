@@ -49,19 +49,15 @@ Executing the bash script `VHrun_ww_seq_analysis.sh` is the recommended way of r
 Here are the steps involved in executing the analysis in more detail. Please note that you won't need to run these scripts individually for routine data analysis.
 
 ### Step 1: Execute detect_new_ww_VHrun.sh
-Execute the bash script with the sequencing `run_name` as an argument:
+Execute the bash script with the name of the Output folder `/Volumes/NGS/Output/VH00770/<raw_run name>` as an argument:
 
 ```bash
-# Define the path to the log file
-log_file1="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/detect_new_ww_VHrun.log"
 
-# Create the status file if it does not exist
-touch "$log_file1"
+sh detect_new_ww_VHrun.sh < Output folder raw_run >
 
-sh detect_new_ww_VHrun.sh $run_name | tee -a $log_file1
 ```
 
-This script initializes the sequencing run analysis. It checks whether the fastq generation step is completed in the Output folder `/Volumes/NGS/Analysis/`, copies the fastq files from the Output folder to the wastewater run folder, sets up the required directory structure for analysis, moves any failed samples to a dedicated directory, renames fastq files for downstream analysis, and prepares fastq files for NCBI submission.
+This script initializes the sequencing run analysis. It checks whether the fastq generation step is completed in the Output folder `/Volumes/NGS/Output/VH00770/<raw_run name>`, copies the fastq files from the Output analysis folder to the wastewater run folder, sets up the required directory structure for analysis, moves any failed samples to a dedicated directory, renames fastq files for downstream analysis, and prepares fastq files for NCBI submission.
 
 This script also generates a csv file with NCBI submission ID and associated fastq file names which are used for generating NCBI submission templates in Data-flo.
 
