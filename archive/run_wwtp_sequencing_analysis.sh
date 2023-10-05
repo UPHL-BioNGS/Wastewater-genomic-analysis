@@ -23,7 +23,7 @@ run_name=$1
 resume_option=$2
 
 # Script directory for relative paths
-script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis'
+script_dir='/Volumes/NGS/Bioinformatics/ww_analysis_scripts/Wastewater-genomic-analysis'
 
 echo "$(date) : Step 1/3. Set up wastewater sequencing analysis"
 
