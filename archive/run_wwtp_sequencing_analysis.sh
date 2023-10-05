@@ -7,9 +7,9 @@ set -e
 
 USAGE="
 Purpose: Bash script to automate wastewater sequencing analysis. Consists of three individual scripts
-1) WWP_seq_initialize_analysis.sh - Set up folder structure for running for sequencing data analysis and cleans up fastq filenames for NCBI submission.
+1) WWP_seq_new_run_auto.sh - Set up folder structure for running for sequencing data analysis and cleans up fastq filenames for NCBI submission.
 2) run_viralrecon.sh - Run viralrecon bioinformatic pipeline with wastewater sequencing data.
-3) run_freyja_vrn_noBoot.sh - Run Freyja with BAM files from viralrecon and generate final output files for Microreact visualization
+3) run_freyjat.sh - Run Freyja with BAM files from viralrecon and generate final output files for Microreact visualization
 
 Usage: run_wwtp_sequencing_analysis.sh <wastewater sequencing run_name>
 
