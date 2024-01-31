@@ -53,7 +53,7 @@ echo "$(date) : Running viralrecon"
 
 if [ "$resume_option" = "-resume" ]
 then
-    nextflow run nf-core/viralrecon -name ${run_name} -resume ${run_name} --input $out_dir/$infile \
+    nextflow run nf-core/viralrecon -resume ${run_name} --input $out_dir/$infile \
                                     --primer_set_version 5.3.2 \
                                     --outdir $out_dir \
                                     --schema_ignore_params 'genomes,primer_set_version' \
