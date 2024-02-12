@@ -82,17 +82,31 @@ echo "$(date) : Rename fastq files for downstream analysis and for NCBI submissi
 #done
 
 for file in *.fastq.gz; do
-    echo "$(date) : Copy fastq files to NCBI submission directory"
-    cp "${file}" "${analysis_dir}/ncbi_submission/$(echo "${file}" | sed -E 's/_S[0-9]+_L[0-9]+/-UT/')"
-    echo "$(date) : Rename fastq files for downstream analysis"
+
     # Check if the file contains the run_name (won't be true for NextSeq 2000 runs)
     if [[ "${file}" == *"${run_name}"* ]]; then
+
+        echo "$(date) : Rename fastq files for downstream analysis"
         # Remove the lane and Set identifiers
         new_name=$(echo "${file}" | sed -E "s/_S[0-9]+_L[0-9]+//")
-        echo "${new_name}"
+        #echo "${new_name}"
         mv "${file}" "${new_name}"
+
+        echo "$(date) : Copy fastq files to NCBI submission directory"
+        #ncbi_file_name=$(echo "${file}" | sed -E "s/_S[0-9]+_L[0-9]+//")
+        ncbi_file_name=$(echo "${new_name}" | sed -E "s/-${run_name}+/-UT/")
+
+        #ncbi_file_name=$(echo "${file}" | sed -E "s/-${run_name}+_S[0-9]+_L[0-9]+/-UT/")
+        #echo "${file}"
+        #echo "${ncbi_file_name}"
+        cp "${new_name}" "${analysis_dir}/ncbi_submission/${ncbi_file_name}"
+
     else
-        # Add the run name and remove the lane and Set identifiers
+        echo "$(date) : Copy fastq files to NCBI submission directory ater removing Lane and Set identifiers"
+        cp "${file}" "${analysis_dir}/ncbi_submission/$(echo "${file}" | sed -E 's/_S[0-9]+_L[0-9]+/-UT/')"
+
+        echo "$(date) : Rename fastq files for downstream analysis"
+        # Remove the lane and Set identifiers and add the run_name
         new_name=$(echo "${file}" | sed -E "s/_S[0-9]+_L[0-9]+_/-${run_name}_/")
         echo "${file}"
         echo "${new_name}"
