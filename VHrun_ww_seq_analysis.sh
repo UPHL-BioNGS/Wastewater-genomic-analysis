@@ -20,7 +20,7 @@ while [ -d "/Volumes/NGS/Analysis" ]
 do
   # First, getting a list of all the complete runs
   # When the NextSeq (VH00770) run is finished, CopyComplete.txt appears in the directory
-  complete_runs=($(ls /Volumes/NGS/Output/VH00770/23*VH00770*/CopyComplete.txt ))
+  complete_runs=($(ls /Volumes/NGS/Output/VH00770/24*VH00770*/CopyComplete.txt ))
   for complete_run in ${complete_runs[@]}
   do
 
