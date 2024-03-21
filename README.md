@@ -13,7 +13,7 @@ The bash scripts set up the required directory structure for analysis, run bioin
 - [Nextflow](https://www.nextflow.io/)
 - [Viralrecon](https://github.com/nf-core/viralrecon)
 - [Freyja](https://github.com/andersen-lab/Freyja/tree/main)
-- Access to `/Volumes/NGS/Analysis/` for getting raw fastq files and  sequencing results directory `/Volumes/IDGenomics_NAS/wastewater_sequencing/` or your specific output directory
+- Access to wastewater sequencing directory `/Volumes/IDGenomics_NAS/wastewater_sequencing/` or your specific output directory
   
 ## Directory Structure
 
@@ -31,33 +31,43 @@ Here is a basic outline of the project's directory structure:
 
 ## Recommended Usage
 
-To run all the steps of the analysis in one single script, simply execute the bash script in a new screen.
+To run all the steps of the analysis in one single script, simply execute the bash script in a new screen with `run_name` as an argument
 
 ```bash
-sh ./VHrun_ww_seq_analysis.sh
+sh ./run_ww_analysis_auto.sh <wastewater sequencing run_name>
+```
+
+You can use the `-resume` flag as an optional argument and it will be passed to [run_viralrecon.sh](run_viralrecon.sh) script and Nextflow will attempt to resume the pipeline. It is a great way of resuming a run without having to start the analysis from scratch. If you don't provide it, `$resume_option` will be empty, and `run_viralrecon.sh` will run without the `-resume` flag, just like before.
+
+```bash
+sh ./run_ww_analysis_auto.sh <wastewater sequencing run_name> -resume
 ```
 
 If the scripts completes successfully, please proceed with python script mentioned below under section [Wastewater Lineage Data Aggregator](#wastewater-lineage-data-aggregator) to get the aggregated result file which can be uploaded in Microreact.
 
 ## Important Notes:
-The script is designed to run indefinitely and will sleep for 240 minutes between checks.
 Always ensure that the mounted directories are accessible before running the script.
-Ensure that you have access to the github repo or it is cloned in your workspace. Local copy of this github repo is currently located at `/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis`.
+Ensure that you have access to the github repo or it is cloned in your workspace. Local copy of this github repo is currently located at `/Volumes/NGS/Bioinformatics/ww_analysis_scripts/Wastewater-genomic-analysis`.
 
-Executing the bash script `VHrun_ww_seq_analysis.sh` is the recommended way of running the wastewater genomics analysis unless you need to troubleshoot the individual scripts when this one fails. Remember to start a screen as this process can take upto hours depending on the sequence data generated.
+Executing the bash script `run_ww_analysis_auto.sh` is the recommended way of running the wastewater genomics analysis unless you need to troubleshoot the individual scripts when this one fails. Remember to start a screen as this process can take upto hours depending on the sequence data generated.
 
 Here are the steps involved in executing the analysis in more detail. Please note that you won't need to run these scripts individually for routine data analysis.
 
-### Step 1: Execute detect_new_ww_VHrun.sh
-Execute the bash script with the name of the Output folder `/Volumes/NGS/Output/VH00770/<raw_run name>` as an argument:
+### Step 1: Execute setup_ww_seq.sh
+Execute the bash script with the name of the run folder that needs to be processed usually located at `/Volumes/IDGenomics_NAS/wastewater_sequencing/` with `run_name` as an argument:
 
 ```bash
+# Define the path to the log file
+log_file1="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/setup_ww_seq.log"
 
-sh detect_new_ww_VHrun.sh < Output folder raw_run >
+# Create the status file if it does not exist
+touch "$log_file1"
+
+sh setup_ww_seq.sh $run_name | tee -a $log_file1
 
 ```
 
-This script initializes the sequencing run analysis. It checks whether the fastq generation step is completed in the Output folder `/Volumes/NGS/Output/VH00770/<raw_run name>`, copies the fastq files from the Output analysis folder to the wastewater run folder, sets up the required directory structure for analysis, moves any failed samples to a dedicated directory, renames fastq files for downstream analysis, and prepares fastq files for NCBI submission.
+This script initializes the sequencing run analysis. It checks whether the fastq generation step is completed for this run in the wastewater sequencing directory `/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name`, sets up the required directory structure for analysis, moves any failed samples to a dedicated directory, renames fastq files for downstream analysis, and prepares fastq files for NCBI submission.
 
 This script also generates a csv file with NCBI submission ID and associated fastq file names which are used for generating NCBI submission templates in Data-flo.
 
@@ -72,7 +82,7 @@ sh run_viralrecon.sh $run_name | tee -a $log_file2
 
 This script executes the [Viralrecon](https://github.com/nf-core/viralrecon) pipeline with wastewater sequencing data. It checks and creates an input samplesheet required to run the Viralrecon pipeline, runs the pipeline, and copies the resulting files to a dedicated `results` directory. 
 
-You can use the `-resume` flag as an optional argument and Nextflow will attempt to resume the pipeline. It is a great way of resuming a run without having to start the analysis from scratch. If you don't provide it, `$resume_option` will be empty, and `run_viralrecon.sh` will run without the `-resume` flag, just like before.
+As described earlier, you can use `-resume` flag as an optional argument and Nextflow will attempt to resume the pipeline.
 
 With `-resume` flag,
 
@@ -93,7 +103,7 @@ log_file3="/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/logs/freyja.l
 sh run_freyja.sh $run_name | tee -a $log_file3
 ```
 
-This script retrieves BAM files for each sample generated by the Viralrecon tool and performs [Freyja](https://github.com/andersen-lab/Freyja/tree/main) analysis. It uses BAM files after the ivar primer trimming step and generates Freyja demultiplexed lineage data. It then aggregates the lineage data and creates a lineage plot. Finally, it copies the aggregated lineage results to the `results` directory.
+This script retrieves BAM files for each sample generated by the viralrecon pipeline and performs [Freyja](https://github.com/andersen-lab/Freyja/tree/main) analysis. It uses BAM files after the ivar primer trimming step and generates Freyja demultiplexed lineage data. It then aggregates the lineage data and creates a lineage plot. Finally, it copies the aggregated lineage results to the `results` directory.
 
 ## Note
 
@@ -116,11 +126,12 @@ After completion of bioinformatic analysis, the project has the following direct
                 ├── freyja
                 └── viralrecon
             ├── failed_samples
+            ├── fastqgen_complete.txt
             ├── logs
                 ├── freyja_demix_status.txt
                 ├── freyja.log
                 ├── viralrecon.log
-                └── detect_new_ww_VHrun.log
+                └── setup_ww_seq.log
             ├── ncbi_submission
                 ├── 230518-ACSSD32-UT_R1.fastq.gz
                 ├── 230518-AVWRF29-UT_R1.fastq.gz
@@ -146,17 +157,17 @@ After completion of bioinformatic analysis, the project has the following direct
             ├── UT-VH00770-230600_sra_upload_metadata.csv
             ├── UT-VH00770-230600_biosample_upload_metadata.csv
             ├── UT-VH00770-230600_ncbi_submission_info.csv
-            ├── UT-VH00770-230600_wastewater_sample_list.csv
+            ├── UT-VH00770-230600_wastewater_sample_list.txt
         
 ```
 
 # Wastewater Lineage Data Aggregator
 
-This script needs to be run after you have generated lineage results by running `VHrun_ww_seq_analysis.sh`. The script described below aggregates lineage data across wastewater sequencing runs. It takes the latest sequencing run results from the `$run_name/results` folder,e.g., `UT-VH00770-230600_freyja_lin_dict_long_df_lingrps_final.csv`, cleans it up (adds collection date, lat-long data), and merges them with previous lineage abundance results to output an aggregated CSV file that can be uploaded into the Wastewater Microreact project.
+This script needs to be run after you have generated lineage results by running `run_ww_analysis_auto.sh` or `run_freyja.sh`. The script described below aggregates lineage data across wastewater sequencing runs. It takes the latest sequencing run results from the `$run_name/results` folder,e.g., `UT-VH00770-230600_freyja_lin_dict_long_df_lingrps_final.csv`, cleans it up (adds collection date, lat-long data), and merges them with previous lineage abundance results to output an aggregated CSV file that can be uploaded into the Wastewater Microreact project.
 
 ## Configuration
 
-Before running the script, you may need to configure the following parameters in the `config` dictionary defined in the `main` function:
+Before running the script externally (not in-house), you may need to configure the following parameters in the `config` dictionary defined in the `main` function:
 
 - `wastewater_seq_dir`: Directory path of the wastewater sequencing data.
 - `lat_long_file`: File path of the latitude and longitude data.
@@ -183,7 +194,7 @@ For more information about the scripts and their functionality, refer to the inl
 After completion of the bioinformatics analysis, the output file `UT-VH00770-230600_ncbi_submission_info.csv` can be used to create NCBI templates for biosample and SRA submission. Detailed instructions on submitting data to NCBI are located at `https://docs.google.com/document/d/1rGCWnDpGljdLqMs0FZ90TJLPtHRFpwIo-lalLKINn0w/edit?usp=sharing`. This file can only be accessed by anyone within UPHL. 
 
 # Debugging
-The scripts provide verbose logs throughout its operation. If there's an issue, the logs will often provide clues about what went wrong. Since 09/01/2023, I have been observing singularity/apptainer related issue when running the pipeline using `VHrun_ww_seq_analysis` at the viralrecon step. The current resolution is to delete the viralrecon folder and re-run the step2 and step3 individually, until we come up with a better solution to resolve this.
+The scripts provide verbose logs throughout its operation. If there's an issue, the logs will often provide clues about what went wrong. Since 09/01/2023, I have been observing singularity/apptainer related issue when running the pipeline using `run_ww_analysis_auto.sh` at the viralrecon step. The current resolution is to resume and re-run the script using `-resume` flag, until we come up with a better solution to resolve this.
 
 # Contribution
 

@@ -126,4 +126,4 @@ cp $outdir*lineages_aggregate.tsv $results
 echo "$(date): Extracting freyja lineage dictionary results and converting it to a long dataframe for downstream processing using the python script freyja_custom_lin_processing.py"
 /home/linuxbrew/.linuxbrew/bin/python3 ${freyja_cln_tsv} ${run_name}
 
-echo "$(date): Freyja analysis post-processing completed. Next step would be to aggregate result from this sequencing run with the previous run results using another python script freyja_old_new_res_merge.py"
+echo "$(date): Freyja analysis post-processing completed. Next step would be to aggregate result from this sequencing run with the previous run results using another python script freyja_old_new_res_merge.py <new_run_directory> <old_results_date>"
