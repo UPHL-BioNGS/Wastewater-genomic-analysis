@@ -18,7 +18,7 @@ echo "$USAGE"
 run_name=$1
 resume_option=$2
 
-script_dir='/Volumes/NGS/Bioinformatics/pooja/ww_analysis_scripts/Wastewater-genomic-analysis'
+script_dir='/Volumes/NGS/Bioinformatics/ww_analysis_scripts/Wastewater-genomic-analysis'
 analysis_dir='/Volumes/IDGenomics_NAS/wastewater_sequencing'
 mkdir -p /Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/analysis/viralrecon/work
 
@@ -36,7 +36,7 @@ echo "$(date) : First create input samplesheet for viralrecon pipeline"
 if [ ! -f "$out_dir/${run_name}_samplesheet.csv" ]
     then
         echo "$(date) : $infile does not exist. Creating samplesheet required to run viralrecon"
-        python $script_dir/conf-files/fastq_dir_to_samplesheet.py $ww_fastq $out_dir/$infile
+        /home/linuxbrew/.linuxbrew/bin/python3 $script_dir/conf-files/fastq_dir_to_samplesheet.py $ww_fastq $out_dir/$infile
         echo "$(date) : $infile Samplesheet generated" 
     else echo "$(date) : $infile already exists, starting viralrecon"
 fi
@@ -46,19 +46,19 @@ fi
 echo "$(date) : Running viralrecon"
 #export SINGULARITY_CACHEDIR=/home/pgupta/singularity
 #export NXF_SINGULARITY_CACHEDIR=/home/pgupta/singularity
+# export APPTAINER_CACHEDIR=/home/pgupta/apptainer
+# export NXF_APPTAINER_CACHEDIR=/home/pgupta/apptainer
 
 #Use UPHL_viralrecon.config to update Pangolin container, if needed
 
 if [ "$resume_option" = "-resume" ]
 then
-    nextflow run nf-core/viralrecon -name ${run_name} -resume ${run_name} --input $out_dir/$infile \
+    nextflow run nf-core/viralrecon -resume ${run_name} --input $out_dir/$infile \
                                     --primer_set_version 5.3.2 \
                                     --outdir $out_dir \
-                                    --nextclade_dataset false \
-                                    --nextclade_dataset_tag false \
                                     --schema_ignore_params 'genomes,primer_set_version' \
-                                    --multiqc_config $script_dir/conf-files/new_multiqc_config.yaml \
                                     -profile singularity \
+                                    --multiqc_config $script_dir/conf-files/new_multiqc_config.yaml \
                                     -params-file $script_dir/conf-files/UPHL_viralrecon_params.yml \
                                     -c $script_dir/conf-files/UPHL_viralrecon.config \
                                     -w $work_dir
@@ -66,11 +66,9 @@ else
 nextflow run nf-core/viralrecon --input $out_dir/$infile \
                                 --primer_set_version 5.3.2 \
                                 --outdir $out_dir \
-                                --nextclade_dataset false \
-				                --nextclade_dataset_tag false \
                                 --schema_ignore_params 'genomes,primer_set_version' \
-                                --multiqc_config $script_dir/conf-files/new_multiqc_config.yaml \
                                 -profile singularity \
+                                --multiqc_config $script_dir/conf-files/new_multiqc_config.yaml \
                                 -params-file $script_dir/conf-files/UPHL_viralrecon_params.yml \
                                 -c $script_dir/conf-files/UPHL_viralrecon.config \
                                 -w $work_dir

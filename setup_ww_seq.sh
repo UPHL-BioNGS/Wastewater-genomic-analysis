@@ -7,13 +7,13 @@ set -e
 
 USAGE="
 Purpose:
-1) This is the first step in script run_wwtp_sequencing_analysis_v2 which sets up directory structure for 
+1) This is the first step in script run_wwtp_sequencing_analysis which sets up directory structure for 
 initiating Wastewater sequencing run analysis and any downstream analysis.
 3) Generate ncbi submission folder that can be directly used for uploading files to NCBI and create a csv file used for uploading into Data-flo to extract biosample and SRA metadata tables.
 
 Usage:
-sh WWP_seq_new_run_auto.sh <wastewater sequencing run_name> | tee -a WWP_seq_new_run_auto.log
-Last updated on June 5,2023
+sh setup_ww_seq.sh <wastewater sequencing run_name> | tee -a setup_ww_seq.log
+Last updated on March 20,2024
 "
 ###########################
 
@@ -23,20 +23,12 @@ echo "$USAGE"
 
 run_name=$1
 
-# Check if the fastq gen step is completed for the new WW run
-if [ ! -f "/Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/fastqgen_complete.txt" ]
-then
-    echo "$(date) : Fastq generation step is not yet completed for run $run_name. Exiting..."
-    exit 1
-fi
-echo "$(date) : Fastq generation step is completed for run $run_name."
-
-# Set directory structure/paths for the new WW run
+# Get directory structure/paths for the new WW run
 analysis_dir=/Volumes/IDGenomics_NAS/wastewater_sequencing/${run_name}
 echo "$(date) : Analysis directory is $analysis_dir."
 
 echo "$(date) : Creating sub directories for downstream analysis"
-mkdir -p $analysis_dir/{ncbi_submission,analysis,failed_samples,results}
+mkdir -p $analysis_dir/{ncbi_submission,analysis,logs,failed_samples,results}
 
 mkdir -p $analysis_dir/raw_data/fastq
 # Output directory paths
@@ -47,17 +39,23 @@ echo "$(date) : Bioinformatics analysis will be stored in $analysis_dir/$run_nam
 sample_sheet="$(ls $analysis_dir/*_wastewater.csv | head -n 1)"
 echo "$(date) : The sample sheet for run $run_name is $sample_sheet"
 
-echo "$(date) : Generating list of wastewater samples from the run sample sheet. Used to fetch matching fastq files in the next step"
-# Though, the sample sheet by default will only contain wastewater samples, doing this to avoid additional files such as 'undetermined_*.fastq.gz' to be included in the downstream analysis 
-grep -i 'Wastewater' $sample_sheet | cut -f 1 -d ',' > $analysis_dir/${run_name}_wastewater_sample_list.csv
+# Though, the sample sheet by default will only contain wastewater samples, this is done to avoid additional files such as 'undetermined_*.fastq.gz' to be included in the downstream analysis 
+#grep -i 'Wastewater' $sample_sheet | cut -f 1 -d ',' > $analysis_dir/${run_name}_wastewater_sample_list.csv
+
+echo "$(date) : Check if the list of wastewater samples is available. Used to fetch matching fastq files in the next step"
+if [ ! -f "$analysis_dir/${run_name}_wastewater_sample_list.txt" ]
+    then
+        echo "$(date) : Wastewater sample list is missing for run $run_name. FATAL!! Exiting..."
+        exit 1
+fi
 
 # Fastq files directory source
 fastq_dir=$analysis_dir/raw_data
 # Fastq files directory destination
 ww_fastq=$analysis_dir/raw_data/fastq
 
-echo "$(date) : Copying fastq files from $fastq_dir to $ww_fastq directory to run with viralrecon"
-find $fastq_dir -type f -name '*.fastq.gz' -print0 | grep -zf $analysis_dir/${run_name}_wastewater_sample_list.csv| parallel -0 "mv {} $ww_fastq/"
+echo "$(date) : Copying fastq files from $fastq_dir to $ww_fastq directory"
+find $fastq_dir -type f -name '*.fastq.gz' -print0 | grep -zf $analysis_dir/${run_name}_wastewater_sample_list.txt| parallel -0 "mv {} $ww_fastq/"
 
 echo "$(date) : Fastq files copied successfully to $ww_fastq"
 cd $ww_fastq
@@ -81,22 +79,34 @@ echo "$(date) : Rename fastq files for downstream analysis and for NCBI submissi
 #    done
 #done
 
-for file in *_R1_001.fastq.gz; do
-    # Check if the file contains the run_name (won't be true for NextSeq 2000 runs)
+for file in *.fastq.gz; do
+
+    # Check if the file contains the run_name (True for NovaSeq runs but not for NextSeq 2000 runs)
     if [[ "${file}" == *"${run_name}"* ]]; then
-        # Remove the lane and Set identifiers
+
+        echo "$(date) : This is a NovaSeq run. Rename fastq files by removing the lane and Set identifiers for downstream analysis"
         new_name=$(echo "${file}" | sed -E "s/_S[0-9]+_L[0-9]+//")
-        echo "${new_name}"
+
+        echo "$(date) : ${file} is renamed as ${new_name}"
         mv "${file}" "${new_name}"
+
+        echo "$(date) : Rename and copy fastq files to NCBI submission directory"
+        ncbi_file_name=$(echo "${new_name}" | sed -E "s/-${run_name}+/-UT/")
+
+        cp "${new_name}" "${analysis_dir}/ncbi_submission/${ncbi_file_name}"
+
     else
-        # Add the run name and remove the lane and Set identifiers
+        echo "$(date) : This is a NextSeq run. Copy fastq files to NCBI submission directory ater removing Lane and Set identifiers"
+        ncbi_file_name=$(echo "${file}" | sed -E 's/_S[0-9]+_L[0-9]+/-UT/')
+
+        cp "${file}" "${analysis_dir}/ncbi_submission/${ncbi_file_name}"
+
+        echo "$(date) : Rename fastq files by removing the lane and Set identifiers and adding $run_name for downstream analysis"
         new_name=$(echo "${file}" | sed -E "s/_S[0-9]+_L[0-9]+_/-${run_name}_/")
-        echo "${file}"
-        echo "${new_name}"
+
+        echo "$(date) : ${file} is renamed as ${new_name}"
         mv "${file}" "${new_name}"
     fi
-    echo "$(date) : Copy the renamed files to NCBI submission directory"
-    cp "${new_name}" "${analysis_dir}/ncbi_submission/$(echo "${new_name}" | sed -E 's#\-(A01290|VH00770).*##')_R1.fastq.gz" 
 done
 
 # Remove controls from NCBI submission directory prior to submission
@@ -108,13 +118,19 @@ echo "$(date) : Fastq files ready for NCBI submission. Fastq filenames have been
 
 # Create a CSV file with NCBI submission ID and associated fastq file names, used later in Data-flo for creating NCBI submission template
 echo "$(date) : Create a csv file with NCBI submission ID and associated fastq file names which gets uploaded to Data-flo for generating NCBI submission templates"
-for file in ${analysis_dir}/ncbi_submission/*.fastq.gz; 
+for file1 in ${analysis_dir}/ncbi_submission/*_R1_001.fastq.gz
 do
-    #echo ${file##*/}
-    sample_id=$(basename "$file" _R1.fastq.gz)
-    echo $sample_id
-    #Generating a csv file with NCBI submission ID and associated fastq file names which gets uploaded to Data-flo for generating NCBI submission templates
-    echo "${sample_id},${file##*/}" >> ${analysis_dir}/${run_name}_ncbi_submission_info.csv
+  sample_id=$(basename "$file1" _R1_001.fastq.gz)
+  echo $sample_id
+  file2="${file1%_R1_001.fastq.gz}_R2_001.fastq.gz"
+
+  if [ -f "$file2" ]; then  # if the file exists
+    echo "Found paired-end fastq file"
+    echo "${sample_id},${file1##*/},${file2##*/}" >> ${analysis_dir}/${run_name}_ncbi_submission_info.csv
+  else
+    echo "Found single-end fastq file"
+    echo "${sample_id},${file1##*/}," >> ${analysis_dir}/${run_name}_ncbi_submission_info.csv
+  fi
 done
 
 echo "$(date) : Fastq files names are now cleaned. Folders and files are in place. You are now ready for downstream bioinformatics analysis and NCBI submission."   

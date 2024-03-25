@@ -6,8 +6,10 @@ kraken2_db_name: 'human'
 genome: 'MN908947.3'
 kraken2_variants_host_filter: true
 skip_asciigenome: true
-min_mapped_reads: 500
+min_mapped_reads: 1000
 save_mpileup: true
+skip_nextclade: true
+skip_pangolin: true
 variant_caller: 'ivar'
 consensus_caller: 'bcftools'
 skip_assembly: true
