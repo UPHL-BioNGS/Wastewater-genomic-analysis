@@ -28,7 +28,10 @@ analysis_dir=/Volumes/IDGenomics_NAS/wastewater_sequencing/${run_name}
 echo "$(date) : Analysis directory is $analysis_dir."
 
 echo "$(date) : Creating sub directories for downstream analysis"
-mkdir -p $analysis_dir/{ncbi_submission,analysis,logs,failed_samples,results}
+# mkdir -p $analysis_dir/{ncbi_submission,analysis,logs,failed_samples,results}
+for dir in ncbi_submission analysis logs failed_samples results; do
+    mkdir -p "$analysis_dir/$dir"
+done
 
 mkdir -p $analysis_dir/raw_data/fastq
 # Output directory paths
