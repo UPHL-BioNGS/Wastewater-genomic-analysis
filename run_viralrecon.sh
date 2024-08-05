@@ -36,7 +36,7 @@ echo "$(date) : First create input samplesheet for viralrecon pipeline"
 if [ ! -f "$out_dir/${run_name}_samplesheet.csv" ]
     then
         echo "$(date) : $infile does not exist. Creating samplesheet required to run viralrecon"
-        /home/linuxbrew/.linuxbrew/bin/python3 $script_dir/conf-files/fastq_dir_to_samplesheet.py $ww_fastq $out_dir/$infile
+        python $script_dir/conf-files/fastq_dir_to_samplesheet.py $ww_fastq $out_dir/$infile
         echo "$(date) : $infile Samplesheet generated" 
     else echo "$(date) : $infile already exists, starting viralrecon"
 fi
