@@ -20,6 +20,7 @@ resume_option=$2
 
 script_dir='/Volumes/NGS/Bioinformatics/ww_analysis_scripts/Wastewater-genomic-analysis'
 analysis_dir='/Volumes/IDGenomics_NAS/wastewater_sequencing'
+mkdir -p /Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/analysis/viralrecon
 mkdir -p /Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/analysis/viralrecon/work
 
 #Creating required folders for analysis
