@@ -29,7 +29,7 @@ Here is a basic outline of the project's directory structure:
                        
 ```
 
-## Outdated - DO NOT RUN THE ANALYSIS USINF THIS SINGLE SCRIPT. Recommended way is to run the analysis scripts individually as detailed below.
+## Outdated - DO NOT RUN THE ANALYSIS USING THIS SINGLE SCRIPT 'run_ww_analysis_auto.sh'. Recommended way is to run the analysis scripts individually as detailed below.
 
 To run all the steps of the analysis in one single script, simply execute the bash script in a new screen with `run_name` as an argument
 
