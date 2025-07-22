@@ -12,14 +12,15 @@ Purpose:
 3) Note the input data are the bam files after ivar primer trimming step.
 
 Usage:
-run_freyja.sh <wastewater sequencing run_name> | tee -a freyja.log
-Last updated on: September 18,2023
+run_freyja_conda.sh <wastewater sequencing run_name> | tee -a freyja.log
+Last updated on: April 18,2025
 "
 ###########################
 
 echo "$USAGE"
 
 run_name=$1
+
 script_dir='/Volumes/NGS/Bioinformatics/ww_analysis_scripts/Wastewater-genomic-analysis'
 
 echo "$(date): Set paths to run directory and freyja post-processing script."
@@ -47,10 +48,9 @@ status_file="/Volumes/NGS_2/wastewater_sequencing/$run_name/logs/freyja_demix_st
 touch "$status_file"
 
 echo "$(date): Pull in the latest Freyja container with updated barcodes." >> $status_file
-singularity pull -F --name staphb-freyja-latest.simg docker://quay.io/staphb/freyja:latest
+freyja update
 
-echo "$(date): Starting Freyja" >> $status_file 
-singularity exec --bind ${analysis_dir} staphb-freyja-latest.simg freyja demix --version >> $status_file
+echo "$(date): Starting Freyja" >> $status_file
 echo "$(date): Getting the input variants and depth file from bam files for Freyja analysis" >> $status_file
 
 # Function to retrieve genome coverage from csv
@@ -63,23 +63,23 @@ coverage_threshold=40  # Set 40% as the threshold
 
 # Loop over each BAM file in input directory, perform Freyja variant analysis, and demultiplex each sample to get lineages
 
-for bam in ${in_dir}/*.ivar_trim.sorted.bam; 
+for bam in ${in_dir}/*.ivar_trim.sorted.bam;
 do
     # Extracting just the identifier from the bam filename
     identifier=$(basename "$bam" .ivar_trim.sorted.bam)
-    
+
     coverage=$(get_coverage "$identifier")
 
-    # Ensure coverage is an integer for comparison 
+    # Ensure coverage is an integer for comparison
     coverage=${coverage%.*} # Remove decimal part if present
-    
+
     if (( $(echo "$coverage >= $coverage_threshold") )); then
         echo "$(date): input file name is $bam"
-        sample=${identifier%-UT*} 
+        sample=${identifier%-UT*}
         echo "$(date): base name is $sample" >> $status_file
         echo "$(date): Running Freyja variants step for $sample" >> $status_file
 
-        singularity exec --bind ${analysis_dir} staphb-freyja-latest.simg freyja variants ${bam} --variants $workdir/${sample}_out_variants --depths $workdir/${sample}_out_depths --ref ${scov2}
+    freyja variants ${bam} --variants $workdir/${sample}_out_variants --depths $workdir/${sample}_out_depths --ref ${scov2}
     else
         echo "$(date): Skipping $bam due to insufficient genome coverage." >> $status_file
     fi
@@ -89,10 +89,8 @@ do
 
     #output_file="$outdir${sample}_lin_out.tsv"
     echo "$(date): Running Demultiplexing step for $sample" >> $status_file
-    singularity exec --bind ${analysis_dir} staphb-freyja-latest.simg freyja demix $workdir/${var} $workdir/${depth} --eps 0.01 --covcut 10 --confirmedonly --output $outdir${sample}_lin_out.tsv
+    freyja demix $workdir/${var} $workdir/${depth} --eps 0.01 --covcut 10 --confirmedonly --output $outdir${sample}_lin_out.tsv
 
-    #echo "$(date): Boostrap analysis step running for $sample" | tee -a $log_file
-    #freyja boot $workdir/${var} $workdir/${depth} --nt 8 --nb 500 --eps 0.01 --output_base $outdir${sample}_boot.tsv
 
     # Check the exit status of the 'freyja demix' command. This is useful for tracking which samples failed at the demultiplex stage.
     if [ $? -eq 0 ]; then
@@ -108,10 +106,8 @@ done
 echo "$(date): Demultiplexing step completed and results are stored in $outdir" >> $status_file
 echo "$(date): Running lineage aggregation step in Freyja"
 
-singularity exec --bind ${analysis_dir} staphb-freyja-latest.simg freyja aggregate $outdir --output $outdir${run_name}_lineages_aggregate.tsv --ext tsv
+freyja aggregate $outdir --output $outdir${run_name}_lineages_aggregate.tsv --ext tsv
 
-#echo "$(date): Plotting lineage aggregate output from Frejya"
-#singularity exec --bind ${analysis_dir} uphl-freyja-latest.simg freyja plot ${outdir}${run_name}_lineages_aggregate.tsv --output $outdir${run_name}_lineages_aggregate_plot.png --lineages
 
 # Check if Freyja analysis completed successfully and the aggregate output file is generated
 if [ -f "${outdir}${run_name}_lineages_aggregate.tsv" ]; then
@@ -129,3 +125,4 @@ echo "$(date): Extracting freyja lineage dictionary results and converting it to
 python ${freyja_cln_tsv} ${run_name}
 
 echo "$(date): Freyja analysis post-processing completed. Next step would be to aggregate result from this sequencing run with the previous run results using another python script freyja_old_new_res_merge.py <new_run_directory> <old_results_date>"
+

@@ -24,7 +24,7 @@ echo "$USAGE"
 run_name=$1
 
 # Get directory structure/paths for the new WW run
-analysis_dir=/Volumes/IDGenomics_NAS/wastewater_sequencing/${run_name}
+analysis_dir=/Volumes/NGS_2/wastewater_sequencing/${run_name}
 echo "$(date) : Analysis directory is $analysis_dir."
 
 echo "$(date) : Creating sub directories for downstream analysis"

@@ -12,7 +12,8 @@ from utils import (prepLineageDict, expand_data, get_parent_lineage, custom_pare
 
 
 # Define constants for file paths and patterns
-WASTEWATER_SEQ_DIR = '/Volumes/IDGenomics_NAS/wastewater_sequencing/'
+WASTEWATER_SEQ_DIR = '/Volumes/NGS_2/wastewater_sequencing/'
+DATA_DIR = '/Volumes/NGS/Bioinformatics/ww_analysis_scripts/Wastewater-genomic-analysis/data'
 
 def load_lineage_mapping(filepath):
     with open(filepath, 'r') as file:
@@ -71,7 +72,7 @@ def main(run_name):
 
     #Add a Parent_lineage_grp column using custom 'get_parent_lineage' function'
 
-    LINEAGE_MAPPING_FILE_PATH = os.path.join(WASTEWATER_SEQ_DIR, 'wwtp_pscripts', 'lineage_mapping.json')
+    LINEAGE_MAPPING_FILE_PATH = os.path.join(DATA_DIR, 'lineage_mapping.json')
     
     lineage_mapping = load_lineage_mapping(LINEAGE_MAPPING_FILE_PATH)
 
