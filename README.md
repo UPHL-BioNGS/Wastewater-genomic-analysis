@@ -180,7 +180,7 @@ The script currently includes default values for these parameters used at UPHL a
 Execute the python script with the two arguments:
 
 - `new_run_name_dir`: Directory name of the new sequencing run results.
-- `old_res_date`: Date of the old lineage abundance results. Check the date of the last modified folder at `/Volumes/IDGenomics_NAS/wastewater_sequencing/all_freyja_results/`
+- `old_res_date`: Date of the old lineage abundance results. Check the date of the last modified folder at `/Volumes/NGS_2/wastewater_sequencing/all_freyja_results/`
 
 ```bash
 python freyja_old_new_res_merge.py <new_run_directory> <old_results_date>
