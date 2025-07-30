@@ -96,7 +96,7 @@ if [ ! -d "/Volumes/NGS_2/wastewater_sequencing/$run_name" ] && [ -n "$wastewate
     ww_fastq=$analysis_dir/raw_data/fastq
 
     echo "$(date) : Copying fastq files from $fastq_dir to $ww_fastq directory to run with viralrecon"
-    find $fastq_dir -type f -name '*.fastq.gz' -print0 | grep -zf $analysis_dir/${run_name}_wastewater_sample_list.csv| parallel -0 "cp {} $ww_fastq/"
+    find $fastq_dir -type f -name '*.fastq.gz' -print0 | grep -zf $analysis_dir/${run_name}_wastewater_sample_list.csv| grep -zviE 'patient|covidseq|flu|influenza|RSV|measles'| parallel -0 "cp {} $ww_fastq/"
 
     echo "$(date) : Fastq files copied successfully to $ww_fastq"
 
