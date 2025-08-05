@@ -13,7 +13,11 @@ The bash scripts set up the required directory structure for analysis, run bioin
 - [Nextflow](https://www.nextflow.io/)
 - [Viralrecon](https://github.com/nf-core/viralrecon)
 - [Freyja](https://github.com/andersen-lab/Freyja/tree/main)
-- Access to wastewater sequencing directory `/Volumes/IDGenomics_NAS/wastewater_sequencing/` or your specific output directory
+- Access to wastewater sequencing directory `/Volumes/NGS_2/wastewater_sequencing/` or your specific output directory
+
+## Important Notes:
+Always ensure that the mounted directories are accessible before running the script.
+Ensure that you have access to the github repo or it is cloned in your workspace. Local copy of this github repo is currently located at `/Volumes/NGS/Bioinformatics/ww_analysis_scripts/Wastewater-genomic-analysis`.
   
 ## Directory Structure
 
