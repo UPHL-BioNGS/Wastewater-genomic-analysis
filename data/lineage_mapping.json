@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Alpha",
+    "prefixes": ["B.1.1.7"]
+  },
+  {
+    "name": "Beta",
+    "prefixes": ["B.1.351"]
+  },
+  {
+    "name": "Gamma",
+    "prefixes": ["P.1", "B.1.1.28.1"]
+  },
+  {
+    "name": "Lambda",
+    "prefixes": ["B.1.1.1.37", "C.37"]
+  },
+  {
+    "name": "Zeta",
+    "prefixes": ["P.2"]
+  },
+  {
+    "name": "Kappa",
+    "prefixes": ["B.1.617.1"]
+  },
+  {
+    "name": "Delta",
+    "prefixes": ["AY", "B.1.617.2"]
+  },
+  {
+    "name": "Epsilon",
+    "prefixes": ["B.1.427", "B.1.429"]
+  },
+  {
+    "name": "Eta",
+    "prefixes": ["B.1.525"]
+  },
+  {
+    "name": "Iota",
+    "prefixes": ["B.1.526"]
+  },
+  {
+    "name": "Mu",
+    "prefixes": ["B.1.621"]
+  },
+  {
+    "name": "Omicron (BA.1)",
+    "prefixes": ["BA.1", "B.1.1.529.1"]
+  },
+  {
+    "name": "Omicron (BA.2)",
+    "prefixes": ["BA.2", "B.1.1.529.2"]
+  },
+  {
+    "name": "Omicron (BA.3)",
+    "prefixes": ["BA.3", "B.1.1.529.3"]
+  },
+  {
+    "name": "Omicron (BA.4)",
+    "prefixes": ["BA.4", "B.1.1.529.4"]
+  },
+  {
+    "name": "Omicron (BA.5)",
+    "prefixes": ["BA.5", "B.1.1.529.5"]
+  },
+  {
+    "name": "Omicron",
+    "prefixes": ["B.1.1.529"]
+  },
+   {
+    "name": "A.1",
+    "prefixes": ["A.1"]
+  },
+  {
+    "name": "B.1",
+    "prefixes": ["B.1"]
+  },
+  {
+    "name": "Recombinant",
+    "prefixes": ["X"]
+  }
+]

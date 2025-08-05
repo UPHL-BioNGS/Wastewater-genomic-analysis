@@ -19,9 +19,9 @@ run_name=$1
 resume_option=$2
 
 script_dir='/Volumes/NGS/Bioinformatics/ww_analysis_scripts/Wastewater-genomic-analysis'
-analysis_dir='/Volumes/IDGenomics_NAS/wastewater_sequencing'
-mkdir -p /Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/analysis/viralrecon
-mkdir -p /Volumes/IDGenomics_NAS/wastewater_sequencing/$run_name/analysis/viralrecon/work
+analysis_dir='/Volumes/NGS_2/wastewater_sequencing'
+mkdir -p /Volumes/NGS_2/wastewater_sequencing/$run_name/analysis/viralrecon
+mkdir -p /Volumes/NGS_2/wastewater_sequencing/$run_name/analysis/viralrecon/work
 
 #Creating required folders for analysis
 ww_fastq=$analysis_dir/$run_name/raw_data/fastq
@@ -77,9 +77,6 @@ fi
 
 echo "$(date) : Copying variant long table result file to $results folder"
 cp $out_dir/variants/ivar/variants_long_table.csv $results/${run_name}_variants_long_table.csv
-
-echo "$(date) : Copying pangolin result files to the $results folder after merging individual pangolin result files" 
-cat $out_dir/variants/ivar/consensus/bcftools/pangolin/*.csv | awk '!a[$0]++' > $results/${run_name}_viralrecon_lineage_report.csv
 
 echo "$(date) : Copying multiqc result files to the results folder"
 cp $out_dir/multiqc/multiqc_report.html $results/${run_name}_multiqc_report.html

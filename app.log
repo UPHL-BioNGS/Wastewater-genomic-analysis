@@ -1,0 +1,4 @@
+2025-05-20 14:44:58,697 - __main__ - INFO - Total number of rows in the original data: 92233
+2025-05-20 14:44:58,733 - __main__ - INFO - Total number of rows after removing duplicates: 92233
+2025-05-20 14:44:58,734 - __main__ - WARNING - Number of rows removed: 0
+2025-05-20 14:44:59,390 - __main__ - INFO - Post-processing of freyja results is complete including aggregating results from previous runs. The output file can now be uploaded in Microreact for visualization.

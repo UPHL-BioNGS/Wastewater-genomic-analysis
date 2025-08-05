@@ -169,8 +169,8 @@ def main(config):
 
 if __name__ == '__main__':
     config = {
-        'wastewater_seq_dir': '/Volumes/IDGenomics_NAS/wastewater_sequencing/',
-        'lat_long_file': '/Volumes/IDGenomics_NAS/wastewater_sequencing/wwtp_pscripts/wwp_lat_long.csv',
-        'all_freyja_results_dir': '/Volumes/IDGenomics_NAS/wastewater_sequencing/all_freyja_results'
+        'wastewater_seq_dir': '/Volumes/NGS_2/wastewater_sequencing/',
+        'lat_long_file': '/Volumes/NGS/Bioinformatics/ww_analysis_scripts/Wastewater-genomic-analysis/data/msd_short_names_lat_long.csv',
+        'all_freyja_results_dir': '/Volumes/NGS_2/wastewater_sequencing/all_freyja_results'
     }
     main(config)

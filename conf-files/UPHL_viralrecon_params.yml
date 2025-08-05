@@ -16,3 +16,5 @@ skip_assembly: true
 skip_multiqc: false
 max_memory: '32.GB'
 max_cpus: 16
+primer_set_version: '5.3.2'
+scheme: 'SARS-CoV-2'
