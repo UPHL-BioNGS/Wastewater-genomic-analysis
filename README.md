@@ -187,13 +187,13 @@ python freyja_old_new_res_merge.py <new_run_directory> <old_results_date>
 ```
 The final output csv file located in `/Volumes/NGS_2/wastewater_sequencing/all_freyja_results/<run_date>` after running the python script can be uploaded to Microreact for visualization.
 
-Copy the final output located at `/Volumes/NGS_2/wastewater_sequencing/all_freyja_results/<run_date>/<run_date>_WW_feyja_varaints_SC2_lineage_abundance_cln.csv` to `/DDCP/Division Shared Files/DCPIP EDX/UPHL/Wastewater_genomics_rshiny/`. This will ensure the latest results get uploaded onto the UPHL's [SARS-CoV-2 wastewater surveillance dashboard] (https://avrpublic.dhhs.utah.gov/uwss/).
+Copy the final output located at `/Volumes/NGS_2/wastewater_sequencing/all_freyja_results/<run_date>/<run_date>_WW_feyja_varaints_SC2_lineage_abundance_cln.csv` to `/DDCP/Division Shared Files/DCPIP EDX/UPHL/Wastewater_genomics_rshiny/`. This will ensure the latest results get uploaded onto the UPHL's [SARS-CoV-2 wastewater surveillance dashboard](https://avrpublic.dhhs.utah.gov/uwss/).
 
 For more information about the scripts and their functionality, refer to the inline comments within the code.
 
 # Uploading Fastq files to NCBI SRA database
 
-After completion of the bioinformatics analysis, the output file `UT-VH00770-230600_ncbi_submission_info.csv` can be used to create NCBI templates for biosample and SRA submission. Detailed instructions on submitting data to NCBI are located at `https://docs.google.com/document/d/1rGCWnDpGljdLqMs0FZ90TJLPtHRFpwIo-lalLKINn0w/edit?usp=sharing`. This file can only be accessed by anyone within UPHL. 
+After completion of the bioinformatics analysis, the output file `UT-VH00770-230600_ncbi_submission_info.csv` can be used to create NCBI templates for biosample and SRA submission. Detailed instructions on submitting data to NCBI are located at (https://docs.google.com/document/d/1rGCWnDpGljdLqMs0FZ90TJLPtHRFpwIo-lalLKINn0w/edit?usp=sharing). This file can only be accessed by anyone within UPHL. 
 
 # Debugging
 The scripts provide verbose logs throughout its operation. If there's an issue, the logs will often provide clues about what went wrong. Since 09/01/2023, I have been observing singularity/apptainer related issue when running the pipeline using `run_ww_analysis_auto.sh` at the viralrecon step. The current resolution is to resume and re-run the script using `-resume` flag, until we come up with a better solution to resolve this.
