@@ -187,6 +187,8 @@ python freyja_old_new_res_merge.py <new_run_directory> <old_results_date>
 ```
 The final output csv file located in `/Volumes/NGS_2/wastewater_sequencing/all_freyja_results/<run_date>` after running the python script can be uploaded to Microreact for visualization.
 
+Copy the final output located at `/Volumes/NGS_2/wastewater_sequencing/all_freyja_results/<run_date>/<run_date>_WW_feyja_varaints_SC2_lineage_abundance_cln.csv` to `/DDCP/Division Shared Files/DCPIP EDX/UPHL/Wastewater_genomics_rshiny/`. This will ensure the latest results get uploaded onto the UPHL's SARS-CoV-2 wastewater surveillance dashboard `https://avrpublic.dhhs.utah.gov/uwss/`.
+
 For more information about the scripts and their functionality, refer to the inline comments within the code.
 
 # Uploading Fastq files to NCBI SRA database
